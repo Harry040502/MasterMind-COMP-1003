@@ -20,32 +20,39 @@ namespace MasterMind_COMP_1003
             int attempts;
             //creates a large dictionary for storing all previous moves.
             Dictionary<int, Dictionary<int, String>> totalhistory = new Dictionary<int, Dictionary<int, string>>();
-
+            //creates game loop
             while (gameRunning == true)
             {
                 Console.WriteLine("Code Maker please enter your code and don't let the breaker see");
+                // creates a boolean to store whether the question was answered correctly or not
                 bool incorrect = false;
+                //creates a for loop for entering the code.
                 for (int x = 0; x < 4; x++)
                 {
                     Console.WriteLine("Enter Position, "+(x+1));
                     startCode[x] = Console.ReadLine();
                     Console.Clear();
                 }
-                int no = 0;
+                //initializes marker variables to 0 
                 redMarker = 0;
                 attempts = 0;
                 whiteMarker = 0;
                 string continue1 = string.Empty;
+                //creates a loop to run whilst the code hasnt been cracked.
                 while (redMarker < 4 && attempts < 10)
                 {
+                    //initializes the history dictionary to avoid referencing
                     Dictionary<int, string> history = new Dictionary<int, string>();
+                    //resets the dictionary
                     history.Clear();
                     redMarker = 0;
                     attempts++;
                     for (int i = 0; i < guessCode.Length; i++)
                     {
+                        //Asks the code breaker to guess the code
                         Console.WriteLine("Guess code position " + (i + 1) + ": ");
                         guessCode[i] = Console.ReadLine();
+                        //adds the contents of the string array to the dictionary "history"
                         history.Add(i, guessCode[i]);
                         incorrect = true;
                         if (guessCode[i] == startCode[i])
@@ -57,7 +64,8 @@ namespace MasterMind_COMP_1003
                         else
                         {
                             int max = 0;
-                            for (no = 0; no < guessCode.Length; no++)
+                            //loops through the code to compare the guess with each element of the code.
+                            for (int no = 0; no < guessCode.Length; no++)
                             {
                                 if (startCode[no] == guessCode[i])
                                 {
@@ -70,6 +78,7 @@ namespace MasterMind_COMP_1003
                                     max++;
                                 }
                             }
+                            //if the element entered doesnt match the 4 elements in the codemakers code then the entry is considered incorrect
                             if (max == 4)
                             {
                                 if (incorrect == true)
@@ -79,10 +88,12 @@ namespace MasterMind_COMP_1003
                                 }
                             }
                         }
+                        //waits before asking for another input
                         System.Threading.Thread.Sleep(1000);
                         Console.Clear();
                     }
                     dict++;
+                    //temp dictionary to avoid referencing history
                     Dictionary<int, string> newval = new Dictionary<int, string>();
                     foreach (KeyValuePair<int, string> kvp in history)
                     {
@@ -93,10 +104,12 @@ namespace MasterMind_COMP_1003
                     totalhistory.Add(dict, newval);
                     if (redMarker == 4)
                     {
+                        // if there are 4 red markers then the user is correct
                         Console.WriteLine("Well done guesser you've won");
                         history.Clear();
                     }
                     else { 
+                        //if there are not 4 markers then the codebreaker is incorrect and needs to retry.
                         Console.WriteLine("Incorrect try again you have "+ (10-attempts) + " attempts left: ");
                         Console.WriteLine("Here are you're current guesses: ");
                         foreach (KeyValuePair<int, string> kvp in history)
